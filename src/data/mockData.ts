@@ -1,0 +1,230 @@
+import { User, Participant, FamilyInfo, ProfessionalBackground, FormData } from '../types';
+
+export const mockUsers: User[] = [
+  {
+    id: '1',
+    username: 'admin',
+    name: 'Administrateur',
+    email: 'admin@example.com',
+    role: 'admin',
+    lastLogin: new Date('2025-03-15T10:30:00'),
+  },
+  {
+    id: '2',
+    username: 'operator',
+    name: 'Opérateur Test',
+    email: 'operator@example.com',
+    role: 'operator',
+    lastLogin: new Date('2025-03-14T15:45:00'),
+  },
+];
+
+export const mockParticipants: Participant[] = [
+  {
+    id: 'P001',
+    firstName: 'Kouassi',
+    lastName: 'Yao',
+    birthDate: '1998-05-12',
+    birthPlace: 'Abidjan',
+    address: {
+      commune: 'Cocody',
+      neighborhood: 'Angré',
+      subNeighborhood: 'Cité Allabra',
+    },
+    nationality: 'Ivoirienne',
+    contact: '+225 0701020304',
+    educationLevel: 'Baccalauréat',
+    diplomas: ['Baccalauréat C', 'BTS Informatique'],
+    createdAt: new Date('2025-01-15'),
+    updatedAt: new Date('2025-01-15'),
+  },
+  {
+    id: 'P002',
+    firstName: 'Aminata',
+    lastName: 'Koné',
+    birthDate: '2000-11-23',
+    birthPlace: 'Bouaké',
+    address: {
+      commune: 'Yopougon',
+      neighborhood: 'Micao',
+      subNeighborhood: 'Micao Bar',
+    },
+    nationality: 'Ivoirienne',
+    contact: '+225 0504030201',
+    educationLevel: 'Licence',
+    diplomas: ['Baccalauréat A2', 'Licence en Droit'],
+    createdAt: new Date('2025-02-03'),
+    updatedAt: new Date('2025-02-05'),
+  },
+  {
+    id: 'P003',
+    firstName: 'Jean',
+    lastName: 'Kouamé',
+    birthDate: '1995-08-17',
+    birthPlace: 'Daloa',
+    address: {
+      commune: 'Abobo',
+      neighborhood: 'Abobo Baoulé',
+      subNeighborhood: 'Marché',
+    },
+    nationality: 'Ivoirienne',
+    contact: '+225 0102030405',
+    educationLevel: 'CAP',
+    diplomas: ['CAP Menuiserie'],
+    createdAt: new Date('2025-02-10'),
+    updatedAt: new Date('2025-02-10'),
+  },
+];
+
+export const mockFamilyInfo: FamilyInfo[] = [
+  {
+    participantId: 'P001',
+    fatherName: 'Yao Koffi',
+    fatherResidence: 'Cocody Angré',
+    fatherProfession: 'Enseignant',
+    fatherContact: '+225 0706050403',
+    motherName: 'Aya N\'Guessan',
+    motherResidence: 'Cocody Angré',
+    motherProfession: 'Commerçante',
+    motherContact: '+225 0706050402',
+    maritalStatus: 'Célibataire',
+    familyStatus: 'Vit chez ses parents',
+  },
+  {
+    participantId: 'P002',
+    fatherName: 'Koné Ibrahim',
+    fatherResidence: 'Yopougon Micao',
+    fatherProfession: 'Retraité',
+    fatherContact: '+225 0504030202',
+    motherName: 'Koné Mariam',
+    motherResidence: 'Yopougon Micao',
+    motherProfession: 'Ménagère',
+    motherContact: '+225 0504030203',
+    guardianName: 'Koné Seydou',
+    guardianResidence: 'Yopougon Micao',
+    guardianProfession: 'Médecin',
+    guardianContact: '+225 0504030204',
+    maritalStatus: 'Célibataire',
+    familyStatus: 'Vit chez son tuteur',
+  },
+  {
+    participantId: 'P003',
+    fatherName: 'Kouamé Konan',
+    fatherResidence: 'Daloa',
+    fatherProfession: 'Agriculteur',
+    fatherContact: '+225 0102030406',
+    motherName: 'Kouamé Adjoua',
+    motherResidence: 'Daloa',
+    motherProfession: 'Ménagère',
+    motherContact: '+225 0102030407',
+    maritalStatus: 'Marié',
+    familyStatus: 'Vit avec sa famille',
+  },
+];
+
+export const mockProfessionalBackground: ProfessionalBackground[] = [
+  {
+    participantId: 'P001',
+    previousJobs: [
+      {
+        title: 'Stagiaire en informatique',
+        duration: '6 mois',
+        description: 'Stage en développement web',
+      },
+    ],
+    desiredJob: 'Développeur Web',
+  },
+  {
+    participantId: 'P002',
+    previousJobs: [
+      {
+        title: 'Assistante juridique',
+        duration: '1 an',
+        description: 'Cabinet d\'avocats à Abidjan',
+      },
+    ],
+    desiredJob: 'Juriste d\'entreprise',
+  },
+  {
+    participantId: 'P003',
+    previousJobs: [
+      {
+        title: 'Apprenti menuisier',
+        duration: '3 ans',
+        description: 'Menuiserie artisanale',
+      },
+      {
+        title: 'Menuisier',
+        duration: '2 ans',
+        description: 'Atelier de fabrication de meubles',
+      },
+    ],
+    desiredJob: 'Menuisier industriel',
+  },
+];
+
+export const mockFormData: FormData[] = mockParticipants.map((participant, index) => ({
+  participant,
+  familyInfo: mockFamilyInfo[index],
+  professionalBackground: mockProfessionalBackground[index],
+}));
+
+export const communes = [
+  'Abobo',
+  'Adjamé',
+  'Attécoubé',
+  'Cocody',
+  'Koumassi',
+  'Marcory',
+  'Plateau',
+  'Port-Bouët',
+  'Treichville',
+  'Yopougon',
+  'Bingerville',
+  'Songon',
+];
+
+export const educationLevels = [
+  'Primaire',
+  'BEPC',
+  'CAP',
+  'BEP',
+  'Baccalauréat',
+  'BTS',
+  'Licence',
+  'Master',
+  'Doctorat',
+];
+
+export const nationalities = [
+  'Ivoirienne',
+  'Burkinabè',
+  'Malienne',
+  'Sénégalaise',
+  'Guinéenne',
+  'Ghanéenne',
+  'Libérienne',
+  'Nigériane',
+  'Autre',
+];
+
+export const jobs = [
+  'Développeur Web',
+  'Administrateur Système',
+  'Technicien Informatique',
+  'Électricien',
+  'Plombier',
+  'Menuisier',
+  'Maçon',
+  'Mécanicien',
+  'Comptable',
+  'Assistant Administratif',
+  'Juriste',
+  'Secrétaire',
+  'Cuisinier',
+  'Serveur',
+  'Réceptionniste',
+  'Agent d\'entretien',
+  'Chauffeur',
+  'Agent de sécurité',
+];
