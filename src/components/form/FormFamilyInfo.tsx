@@ -29,14 +29,6 @@ export const FormFamilyInfo: React.FC<FormFamilyInfoProps> = ({
     { value: "Veuf(ve)", label: "Veuf(ve)" },
   ];
 
-  const familyStatusOptions = [
-    { value: "Vit chez ses parents", label: "Vit chez ses parents" },
-    { value: "Vit avec sa famille", label: "Vit avec sa famille" },
-    { value: "Vit chez son tuteur", label: "Vit chez son tuteur" },
-    { value: "Vit seul(e)", label: "Vit seul(e)" },
-    { value: "Autre", label: "Autre" },
-  ];
-
   return (
     <Card>
       <CardContent className="pt-6">
@@ -184,15 +176,46 @@ export const FormFamilyInfo: React.FC<FormFamilyInfoProps> = ({
                 disabled={isViewMode}
               />
 
-              <Select
-                label="Situation familiale"
-                name="familyStatus"
-                value={data.familyStatus ?? ""}
-                onChange={handleChange}
-                options={familyStatusOptions}
-                required
-                disabled={isViewMode}
-              />
+              <div>
+                <label
+                  htmlFor="familyStatus"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Situation familiale
+                </label>
+                <Select
+                  name="familyStatus"
+                  value={data.familyStatus ?? ""}
+                  onChange={handleChange}
+                  options={[
+                    {
+                      value: "vit_chez_ses_parents",
+                      label: "Vit chez ses parents",
+                    },
+                    {
+                      value: "vit_avec_sa_famille",
+                      label: "Vit avec sa famille",
+                    },
+                    {
+                      value: "vit_chez_son_tuteur",
+                      label: "Vit chez son tuteur",
+                    },
+                    { value: "vit_seul", label: "Vit seul(e)" },
+                    { value: "autre", label: "Autre" },
+                  ]}
+                  disabled={isViewMode}
+                />
+                {data.familyStatus === "autre" && (
+                  <Input
+                    label="Précisez votre situation familiale"
+                    name="familyStatusOther"
+                    value={data.familyStatusOther ?? ""}
+                    onChange={handleChange}
+                    placeholder="Entrez votre situation familiale"
+                    disabled={isViewMode}
+                  />
+                )}
+              </div>
             </div>
           </div>
 
