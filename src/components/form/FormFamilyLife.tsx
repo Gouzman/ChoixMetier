@@ -1,19 +1,8 @@
 import React from "react";
 import { Input } from "../ui/Input";
 import { Card, CardContent } from "../ui/Card";
-import { ProfessionalBackground } from "../../types"; // Ajout de l'import manquant
 
-interface FormProfessionalInfoProps {
-  data: Partial<ProfessionalBackground>; // Correction pour inclure la propriété `data`
-  onChange: (data: Partial<ProfessionalBackground>) => void;
-  isViewMode?: boolean;
-}
-
-export const FormProfessionalInfo: React.FC<FormProfessionalInfoProps> = ({
-  data,
-  onChange,
-  isViewMode,
-}) => {
+export const FormProfessionalInfo: React.FC = () => {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -25,12 +14,7 @@ export const FormProfessionalInfo: React.FC<FormProfessionalInfoProps> = ({
             <Input
               label="Avec qui vivais-tu avant de venir sur le centre ?"
               name="livingBeforeCenter"
-              value={data.livingBeforeCenter || ""}
-              onChange={(e) =>
-                onChange({ ...data, livingBeforeCenter: e.target.value })
-              }
               placeholder="Entrez votre réponse"
-              disabled={isViewMode}
             />
 
             <div>
@@ -47,12 +31,7 @@ export const FormProfessionalInfo: React.FC<FormProfessionalInfoProps> = ({
                     id="hasPartner-yes"
                     name="hasPartner"
                     value="yes"
-                    checked={data.hasPartner === "yes"}
-                    onChange={(e) =>
-                      onChange({ ...data, hasPartner: e.target.value })
-                    }
                     className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
-                    disabled={isViewMode}
                   />
                   <span className="ml-2">Oui</span>
                 </label>
@@ -62,12 +41,7 @@ export const FormProfessionalInfo: React.FC<FormProfessionalInfoProps> = ({
                     id="hasPartner-no"
                     name="hasPartner"
                     value="no"
-                    checked={data.hasPartner === "no"}
-                    onChange={(e) =>
-                      onChange({ ...data, hasPartner: e.target.value })
-                    }
                     className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
-                    disabled={isViewMode}
                   />
                   <span className="ml-2">Non</span>
                 </label>

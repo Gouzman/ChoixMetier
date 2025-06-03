@@ -1,11 +1,11 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import { User } from 'lucide-react';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import { User } from "lucide-react";
 
 export const AuthLayout: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
-  
+
   // Show loading state while checking authentication
   if (isLoading) {
     return (
@@ -14,12 +14,12 @@ export const AuthLayout: React.FC = () => {
       </div>
     );
   }
-  
+
   // Redirect to dashboard if already authenticated
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
-  
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -28,13 +28,16 @@ export const AuthLayout: React.FC = () => {
             <div className="mx-auto h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center">
               <User className="h-8 w-8 text-white" />
             </div>
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">GestionMétiers</h2>
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              Connectez-vous
+            </h2>
           </div>
           <Outlet />
         </div>
       </div>
       <footer className="py-4 text-center text-sm text-gray-500">
-        &copy; {new Date().getFullYear()} GestionMétiers. Tous droits réservés.
+        &copy; {new Date().getFullYear()} FicheDeChoixDeMetier. Tous droits
+        réservés.
       </footer>
     </div>
   );

@@ -1,9 +1,10 @@
-import React from 'react';
-import { Tabs, TabList, TabTrigger, TabContent } from '../ui/Tabs';
-import { FormPersonalInfo } from './FormPersonalInfo';
-import { FormFamilyInfo } from './FormFamilyInfo';
-import { FormProfessionalInfo } from './FormProfessionalInfo';
-import { FormData } from '../../types';
+import React from "react";
+import { Tabs, TabList, TabTrigger, TabContent } from "../ui/Tabs";
+import { FormPersonalInfo } from "./FormPersonalInfo";
+import { FormFamilyInfo } from "./FormFamilyInfo";
+import { FormProfessionalInfo } from "./FormProfessionalInfo";
+import { FormProfessionalDetails } from "./FormProfessionalDetails";
+import { FormData, ProfessionalBackground } from "../../types";
 
 interface FormTabsProps {
   formData: Partial<FormData>;
@@ -11,47 +12,59 @@ interface FormTabsProps {
   isViewMode?: boolean;
 }
 
-export const FormTabs: React.FC<FormTabsProps> = ({ 
-  formData, 
+export const FormTabs: React.FC<FormTabsProps> = ({
+  formData,
   onChange,
-  isViewMode = false
+  isViewMode = false,
 }) => {
   return (
     <Tabs defaultValue="personal" className="w-full">
       <TabList>
-        <TabTrigger value="personal">
-          Informations personnelles
-        </TabTrigger>
-        <TabTrigger value="family">
-          Informations familiales
-        </TabTrigger>
-        <TabTrigger value="professional">
-          Parcours professionnel
-        </TabTrigger>
+        <TabTrigger value="personal">Informations personnelles</TabTrigger>
+        <TabTrigger value="family">Informations familiales</TabTrigger>
+        <TabTrigger value="professional">Parcours professionnel</TabTrigger>
+        <TabTrigger value="professionalDetails">Détails professionnels</TabTrigger>
       </TabList>
-      
+
       <TabContent value="personal">
-        <FormPersonalInfo 
-          data={formData.participant} 
-          onChange={(participant) => onChange({ participant })}
+        <FormPersonalInfo
+          data={formData.participant || {}}
+          onChange={(participant) =>
+            onChange({
+              participant: { ...formData.participant, ...participant },
+            })
+          }
           isViewMode={isViewMode}
         />
       </TabContent>
-      
+
       <TabContent value="family">
-        <FormFamilyInfo 
-          data={formData.familyInfo} 
-          onChange={(familyInfo) => onChange({ familyInfo })}
+        <FormFamilyInfo
+          data={formData.familyInfo || {}}
+          onChange={(familyInfo) =>
+            onChange({ familyInfo: { ...formData.familyInfo, ...familyInfo } })
+          }
           isViewMode={isViewMode}
         />
       </TabContent>
-      
+
       <TabContent value="professional">
-        <FormProfessionalInfo 
-          data={formData.professionalBackground} 
-          onChange={(professionalBackground) => onChange({ professionalBackground })}
+        <FormProfessionalInfo
+          data={formData.professionalBackground || {}}
+          onChange={(professionalBackground: Partial<ProfessionalBackground>) =>
+            onChange({
+              professionalBackground: {
+                ...formData.professionalBackground,
+                ...professionalBackground,
+              },
+            })
+          }
           isViewMode={isViewMode}
         />
+      </TabContent>
+
+      <TabContent value="professionalDetails">
+        <FormProfessionalDetails />
       </TabContent>
     </Tabs>
   );

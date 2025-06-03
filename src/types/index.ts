@@ -8,53 +8,55 @@ export interface User {
 }
 
 export interface Participant {
-  id: string;
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  birthPlace: string;
-  address: {
+  id?: string; // Modification pour permettre undefined
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
+  birthPlace?: string;
+  address?: {
     commune?: string;
     neighborhood?: string;
     subNeighborhood?: string;
   };
-  nationality: string;
-  contact: string;
-  educationLevel: string;
-  diplomas: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  nationality?: string;
+  contact?: string;
+  educationLevel?: string;
+  diplomas?: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface FamilyInfo {
-  participantId: string;
-  fatherName: string;
-  fatherResidence: string;
-  fatherProfession: string;
-  fatherContact: string;
-  motherName: string;
-  motherResidence: string;
-  motherProfession: string;
-  motherContact: string;
+  participantId?: string; // Modification pour permettre undefined
+  fatherName?: string;
+  fatherResidence?: string;
+  fatherProfession?: string;
+  fatherContact?: string;
+  motherName?: string;
+  motherResidence?: string;
+  motherProfession?: string;
+  motherContact?: string;
   guardianName?: string;
   guardianResidence?: string;
   guardianProfession?: string;
   guardianContact?: string;
-  maritalStatus: string;
-  familyStatus: string;
-  familyStatusOther?: string; // Ajout de la propriété pour préciser la situation familiale lorsqu'elle est "Autre"
-  isOrphan?: string; // Ajout de la propriété pour indiquer si le participant est orphelin
-  orphanType?: string; // Ajout de la propriété pour spécifier le type d'orphelin
+  maritalStatus?: string;
+  familyStatus?: string;
+  familyStatusOther?: string;
+  isOrphan?: string;
+  orphanType?: string;
 }
 
 export interface ProfessionalBackground {
-  participantId: string;
-  previousJobs: Array<{
-    title: string;
-    duration: string;
+  participantId?: string; // Modification pour permettre undefined
+  previousJobs?: Array<{
+    title?: string;
+    duration?: string;
     description?: string;
   }>;
-  desiredJob: string;
+  desiredJob?: string;
+  livingBeforeCenter?: string; // Ajout pour la section "VIE FAMILIALE"
+  hasPartner?: string; // Ajout pour la section "VIE FAMILIALE"
 }
 
 export interface FormData {
