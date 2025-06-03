@@ -42,6 +42,9 @@ export interface FamilyInfo {
   guardianContact?: string;
   maritalStatus: string;
   familyStatus: string;
+  familyStatusOther?: string; // Ajout de la propriété pour préciser la situation familiale lorsqu'elle est "Autre"
+  isOrphan?: string; // Ajout de la propriété pour indiquer si le participant est orphelin
+  orphanType?: string; // Ajout de la propriété pour spécifier le type d'orphelin
 }
 
 export interface ProfessionalBackground {

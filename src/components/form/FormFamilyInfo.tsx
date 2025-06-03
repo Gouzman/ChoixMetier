@@ -195,6 +195,59 @@ export const FormFamilyInfo: React.FC<FormFamilyInfoProps> = ({
               />
             </div>
           </div>
+
+          <div>
+            <label
+              htmlFor="isOrphan"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Es-tu orphelin ?
+            </label>
+            <div className="mt-2 space-x-4">
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="isOrphan"
+                  value="yes"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Oui</span>
+              </label>
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="isOrphan"
+                  value="no"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Non</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="orphanType"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Si oui, type (père, mère, père et mère)
+            </label>
+            <Select
+              name="orphanType"
+              value={data.orphanType ?? ""}
+              onChange={handleChange}
+              options={[
+                { value: "pere", label: "Père" },
+                { value: "mere", label: "Mère" },
+                { value: "pere_et_mere", label: "Père et Mère" },
+              ]}
+              disabled={isViewMode || data.isOrphan !== "yes"}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

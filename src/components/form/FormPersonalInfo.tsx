@@ -38,6 +38,7 @@ export const FormPersonalInfo: React.FC<FormPersonalInfoProps> = ({
   return (
     <Card>
       <CardContent className="pt-6">
+        <h2 className="text-lg font-bold text-gray-800 mb-4">Identification</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
             label="Nom"
@@ -142,22 +143,154 @@ export const FormPersonalInfo: React.FC<FormPersonalInfoProps> = ({
             disabled={isViewMode}
           />
 
-          {/* For simplicity, we're not handling the diplomas array properly here */}
-          <Input
-            label="Diplômes obtenus (séparés par des virgules)"
-            name="diplomas"
-            value={data.diplomas?.join(", ") ?? ""}
-            onChange={(e) => {
-              onChange({
-                ...data,
-                diplomas: e.target.value
-                  .split(",")
-                  .map((d) => d.trim())
-                  .filter(Boolean),
-              });
-            }}
-            disabled={isViewMode}
-          />
+          <div>
+            <label
+              htmlFor="diplomas"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Diplômes obtenus
+            </label>
+            <div className="mt-2 space-y-2">
+              <label
+                key="aucun"
+                className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition"
+              >
+                <input
+                  type="checkbox"
+                  id="diplomas-none"
+                  name="diplomas"
+                  value="aucun"
+                  checked={data.diplomas?.includes("aucun") || false}
+                  onChange={(e) => {
+                    const selectedDiplomas = data.diplomas || [];
+                    if (e.target.checked) {
+                      onChange({
+                        ...data,
+                        diplomas: ["aucun"],
+                      });
+                    } else {
+                      onChange({
+                        ...data,
+                        diplomas: selectedDiplomas.filter((d) => d !== "aucun"),
+                      });
+                    }
+                  }}
+                  disabled={isViewMode}
+                  className="form-checkbox h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">
+                  Aucun diplôme
+                </span>
+              </label>
+              {educationLevels
+                .filter((level) => level !== "CAPUCHON" && level !== "BEP")
+                .concat("Ecole coranique")
+                .map((level) => (
+                  <label
+                    key={level}
+                    className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition"
+                  >
+                    <input
+                      type="checkbox"
+                      id={`diplomas-${level}`}
+                      name="diplomas"
+                      value={level}
+                      checked={data.diplomas?.includes(level) || false}
+                      onChange={(e) => {
+                        const selectedDiplomas = data.diplomas || [];
+                        if (e.target.checked) {
+                          onChange({
+                            ...data,
+                            diplomas: [
+                              ...selectedDiplomas.filter((d) => d !== "aucun"),
+                              level,
+                            ],
+                          });
+                        } else {
+                          onChange({
+                            ...data,
+                            diplomas: selectedDiplomas.filter(
+                              (d) => d !== level
+                            ),
+                          });
+                        }
+                      }}
+                      disabled={isViewMode}
+                      className="form-checkbox h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                    />
+                    <span className="ml-2 text-gray-700 font-medium">
+                      {level}
+                    </span>
+                  </label>
+                ))}
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="canRead"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Sais-tu lire ?
+            </label>
+            <div className="mt-2 space-x-4">
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="canRead"
+                  value="yes"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Oui</span>
+              </label>
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="canRead"
+                  value="no"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Non</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="canWrite"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Sais-tu écrire ?
+            </label>
+            <div className="mt-2 space-x-4">
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="canWrite"
+                  value="yes"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Oui</span>
+              </label>
+              <label className="inline-flex items-center bg-gray-100 p-2 rounded-lg shadow-md hover:bg-gray-200 transition">
+                <input
+                  type="radio"
+                  name="canWrite"
+                  value="no"
+                  onChange={handleChange}
+                  disabled={isViewMode}
+                  className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                />
+                <span className="ml-2 text-gray-700 font-medium">Non</span>
+              </label>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
