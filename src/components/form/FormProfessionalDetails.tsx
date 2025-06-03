@@ -2,7 +2,11 @@ import React from "react";
 import { Input } from "../ui/Input";
 import { Card, CardContent } from "../ui/Card";
 
-export const FormProfessionalDetails: React.FC = () => {
+export const FormProfessionalDetails: React.FC<{
+  data?: any;
+  onChange?: (data: any) => void;
+  isViewMode?: boolean;
+}> = ({ data = {}, onChange = () => {}, isViewMode = false }) => {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -15,19 +19,34 @@ export const FormProfessionalDetails: React.FC = () => {
             <Input
               label="Que faisais-tu comme activité avant de venir sur le centre ?"
               name="pastActivity"
+              value={data.pastActivity ?? ""}
+              onChange={(e) =>
+                onChange({ ...data, pastActivity: e.target.value })
+              }
               placeholder="Ex: Cyber criminel, vols, agressions"
+              disabled={isViewMode}
             />
 
             <Input
               label="Avec qui menais-tu cette activité ?"
               name="activityPartners"
+              value={data.activityPartners ?? ""}
+              onChange={(e) =>
+                onChange({ ...data, activityPartners: e.target.value })
+              }
               placeholder="Ex: Mes amis"
+              disabled={isViewMode}
             />
 
             <Input
               label="Où exerçais-tu cette activité ?"
               name="activityLocation"
+              value={data.activityLocation ?? ""}
+              onChange={(e) =>
+                onChange({ ...data, activityLocation: e.target.value })
+              }
               placeholder="Ex: Partout sur Abidjan"
+              disabled={isViewMode}
             />
           </div>
 
@@ -39,7 +58,12 @@ export const FormProfessionalDetails: React.FC = () => {
             <Input
               label="Quel métier veux-tu exercer à la sortie du centre ?"
               name="desiredProfession"
+              value={data.desiredProfession ?? ""}
+              onChange={(e) =>
+                onChange({ ...data, desiredProfession: e.target.value })
+              }
               placeholder="Ex: Soudure"
+              disabled={isViewMode}
             />
 
             <div>
@@ -56,7 +80,12 @@ export const FormProfessionalDetails: React.FC = () => {
                     id="hasExperience-yes"
                     name="hasExperience"
                     value="yes"
+                    checked={data.hasExperience === "yes"}
+                    onChange={(e) =>
+                      onChange({ ...data, hasExperience: e.target.value })
+                    }
                     className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                    disabled={isViewMode}
                   />
                   <span className="ml-2">Oui</span>
                 </label>
@@ -66,7 +95,12 @@ export const FormProfessionalDetails: React.FC = () => {
                     id="hasExperience-no"
                     name="hasExperience"
                     value="no"
+                    checked={data.hasExperience === "no"}
+                    onChange={(e) =>
+                      onChange({ ...data, hasExperience: e.target.value })
+                    }
                     className="form-radio h-5 w-5 text-blue-600 focus:ring focus:ring-blue-300"
+                    disabled={isViewMode}
                   />
                   <span className="ml-2">Non</span>
                 </label>
@@ -76,7 +110,12 @@ export const FormProfessionalDetails: React.FC = () => {
             <Input
               label="Si Oui, combien de temps as-tu exercé ce métier ?"
               name="experienceDuration"
+              value={data.experienceDuration ?? ""}
+              onChange={(e) =>
+                onChange({ ...data, experienceDuration: e.target.value })
+              }
               placeholder="Ex: 7 ans"
+              disabled={isViewMode || data.hasExperience !== "yes"}
             />
           </div>
         </div>

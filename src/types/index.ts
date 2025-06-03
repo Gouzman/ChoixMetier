@@ -59,10 +59,28 @@ export interface ProfessionalBackground {
   hasPartner?: string; // Ajout pour la section "VIE FAMILIALE"
 }
 
+export interface ProfessionalDetails {
+  pastProfession?: string;
+  currentProfession?: string;
+}
+
+export interface SchoolReturn {
+  hasReturnedToSchool?: boolean;
+  returnReason?: string;
+  schoolStopDate?: string;
+  lastClass?: string;
+  desiredClass?: string;
+  emergencyProject?: string;
+  dormitory?: string;
+  formDate?: string;
+}
+
 export interface FormData {
   participant: Participant;
   familyInfo: FamilyInfo;
   professionalBackground: ProfessionalBackground;
+  professionalDetails?: ProfessionalDetails;
+  schoolReturn?: SchoolReturn;
 }
 
 export interface SearchFilter {

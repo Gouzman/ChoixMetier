@@ -4,6 +4,7 @@ import { FormPersonalInfo } from "./FormPersonalInfo";
 import { FormFamilyInfo } from "./FormFamilyInfo";
 import { FormProfessionalInfo } from "./FormProfessionalInfo";
 import { FormProfessionalDetails } from "./FormProfessionalDetails";
+import { FormSchoolReturn } from "./FormSchoolReturn";
 import { FormData, ProfessionalBackground } from "../../types";
 
 interface FormTabsProps {
@@ -23,7 +24,10 @@ export const FormTabs: React.FC<FormTabsProps> = ({
         <TabTrigger value="personal">Informations personnelles</TabTrigger>
         <TabTrigger value="family">Informations familiales</TabTrigger>
         <TabTrigger value="professional">Parcours professionnel</TabTrigger>
-        <TabTrigger value="professionalDetails">Détails professionnels</TabTrigger>
+        <TabTrigger value="professionalDetails">
+          Détails professionnels
+        </TabTrigger>
+        <TabTrigger value="schoolReturn">Retour à l'école</TabTrigger>
       </TabList>
 
       <TabContent value="personal">
@@ -64,7 +68,33 @@ export const FormTabs: React.FC<FormTabsProps> = ({
       </TabContent>
 
       <TabContent value="professionalDetails">
-        <FormProfessionalDetails />
+        <FormProfessionalDetails
+          data={formData.professionalDetails ?? {}}
+          onChange={(professionalDetails) =>
+            onChange({
+              professionalDetails: {
+                ...formData.professionalDetails,
+                ...professionalDetails,
+              },
+            })
+          }
+          isViewMode={isViewMode}
+        />
+      </TabContent>
+
+      <TabContent value="schoolReturn">
+        <FormSchoolReturn
+          data={formData.schoolReturn ?? {}}
+          onChange={(schoolReturn) =>
+            onChange({
+              schoolReturn: {
+                ...formData.schoolReturn,
+                ...schoolReturn,
+              },
+            })
+          }
+          isViewMode={isViewMode}
+        />
       </TabContent>
     </Tabs>
   );
