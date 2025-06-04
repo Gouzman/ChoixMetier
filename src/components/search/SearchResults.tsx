@@ -1,14 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useFormStore } from '../../store/formStore';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../ui/Table';
-import { Button } from '../ui/Button';
-import { formatDate } from '../../lib/utils';
-import { Eye, Edit, FileText } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useFormStore } from "../../store/formStore";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "../ui/Table";
+import { Button } from "../ui/Button";
+import { formatDate } from "../../lib/utils";
+import { Eye, Edit, FileText } from "lucide-react";
 
 export const SearchResults: React.FC = () => {
   const { searchResults, isLoading } = useFormStore();
-  
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -16,19 +23,21 @@ export const SearchResults: React.FC = () => {
       </div>
     );
   }
-  
+
   if (searchResults.length === 0) {
     return (
       <div className="text-center py-8 bg-white rounded-lg border border-gray-200">
         <FileText className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-sm font-medium text-gray-900">Aucun résultat</h3>
+        <h3 className="mt-2 text-sm font-medium text-gray-900">
+          Aucun résultat
+        </h3>
         <p className="mt-1 text-sm text-gray-500">
           Aucun formulaire ne correspond à votre recherche.
         </p>
       </div>
     );
   }
-  
+
   return (
     <div className="bg-white shadow-sm rounded-lg border border-gray-200 overflow-hidden">
       <div className="p-4 border-b border-gray-200 bg-gray-50">
@@ -36,7 +45,7 @@ export const SearchResults: React.FC = () => {
           Résultats ({searchResults.length})
         </h3>
       </div>
-      
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -55,17 +64,19 @@ export const SearchResults: React.FC = () => {
               <TableCell className="font-medium">
                 {form.participant.lastName} {form.participant.firstName}
               </TableCell>
-              <TableCell>{form.participant.address.commune}</TableCell>
+              <TableCell>
+                {form.participant?.address?.commune ?? "N/A"}
+              </TableCell>
               <TableCell>{form.professionalBackground.desiredJob}</TableCell>
-              <TableCell>{formatDate(form.participant.createdAt)}</TableCell>
+              <TableCell>
+                {form.participant?.createdAt
+                  ? formatDate(form.participant.createdAt as Date)
+                  : "N/A"}
+              </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end space-x-2">
                   <Link to={`/forms/${form.participant.id}`}>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      icon={<Eye size={16} />}
-                    >
+                    <Button variant="ghost" size="sm" icon={<Eye size={16} />}>
                       Voir
                     </Button>
                   </Link>

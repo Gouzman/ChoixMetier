@@ -1,0 +1,10 @@
+import { User, Participant, FamilyInfo, ProfessionalBackground, FormData } from '../types';
+export declare const mockUsers: User[];
+export declare const mockParticipants: Participant[];
+export declare const mockFamilyInfo: FamilyInfo[];
+export declare const mockProfessionalBackground: ProfessionalBackground[];
+export declare const mockFormData: FormData[];
+export declare const communes: string[];
+export declare const educationLevels: string[];
+export declare const nationalities: string[];
+export declare const jobs: string[];
