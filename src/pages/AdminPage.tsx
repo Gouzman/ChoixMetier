@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PageContainer } from "../components/layout/PageContainer";
 import {
   Card,
@@ -17,7 +17,6 @@ import {
 import { useAuthStore } from "../store/authStore";
 import { Alert } from "../components/ui/Alert";
 import { formatDate } from "../lib/utils";
-import { mockUsers } from "../data/mockData";
 import { Shield } from "lucide-react";
 import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
@@ -25,8 +24,39 @@ import { Input } from "../components/ui/Input";
 
 const AdminPage: React.FC = () => {
   const { user } = useAuthStore();
-  const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [users, setUsers] = useState<any[]>([]);
+  const [activeModal, setActiveModal] = useState<"add" | "edit" | null>(null);
+  const [addUserForm, setAddUserForm] = useState({
+    username: "",
+    name: "",
+    email: "",
+    role: "operator",
+  });
+  const [editUserForm, setEditUserForm] = useState<any>({});
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      // Replace with API call or mock data
+      const fetchedUsers: any[] = []; // Ajout du type explicite
+      setUsers(fetchedUsers);
+    };
+    fetchUsers();
+  }, []);
+
+  const handleEditUser = async (id: number, userData: any) => {
+    // Replace with API call
+    const updatedUser = { ...userData, id };
+    setUsers((prev) =>
+      prev.map((user) => (user.id === id ? updatedUser : user))
+    );
+    setActiveModal(null);
+  };
+
+  const handleFormDataConversion = (formData: FormData): any => {
+    const entries = Object.fromEntries(formData.entries());
+    return entries;
+  };
 
   // Check if user is admin
   if (user?.role !== "admin") {
@@ -48,12 +78,12 @@ const AdminPage: React.FC = () => {
         <CardHeader>
           <CardTitle>Utilisateurs du système</CardTitle>
           <div className="flex justify-end">
-            <Button variant="primary" onClick={() => setAddModalOpen(true)}>
+            <Button variant="primary" onClick={() => setActiveModal("add")}>
               Ajouter
             </Button>
             <Button
               variant="secondary"
-              onClick={() => setEditModalOpen(true)}
+              onClick={() => setActiveModal("edit")}
               className="ml-4"
             >
               Modifier
@@ -73,7 +103,7 @@ const AdminPage: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockUsers.map((user) => (
+              {users.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell>{user.id}</TableCell>
                   <TableCell className="font-medium">{user.username}</TableCell>
@@ -98,33 +128,63 @@ const AdminPage: React.FC = () => {
       </Card>
 
       {/* Modal for Adding User */}
-      {isAddModalOpen && (
+      {activeModal === "add" && (
         <Modal
           title="Ajouter un utilisateur"
-          onClose={() => setAddModalOpen(false)}
+          onClose={() => setActiveModal(null)}
         >
-          <form>
-            <Input
-              label="Identifiant"
-              name="id"
-              placeholder="Entrez l'identifiant"
-            />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const userData = { ...addUserForm, lastLogin: null };
+              const newUser = { ...userData, id: users.length + 1 };
+              setUsers((prev) => [...prev, newUser]);
+              setActiveModal(null);
+            }}
+          >
             <Input
               label="Nom d'utilisateur"
               name="username"
+              value={addUserForm.username}
+              onChange={(e) =>
+                setAddUserForm((prev) => ({
+                  ...prev,
+                  username: e.target.value,
+                }))
+              }
               placeholder="Entrez le nom d'utilisateur"
+              required
             />
             <Input
               label="Nom complet"
               name="name"
+              value={addUserForm.name}
+              onChange={(e) =>
+                setAddUserForm((prev) => ({ ...prev, name: e.target.value }))
+              }
               placeholder="Entrez le nom complet"
+              required
             />
-            <Input label="E-mail" name="email" placeholder="Entrez l'e-mail" />
-            <Input label="Rôle" name="role" placeholder="Entrez le rôle" />
             <Input
-              label="Dernière connexion"
-              name="lastLogin"
-              placeholder="Entrez la date de dernière connexion"
+              label="E-mail"
+              name="email"
+              value={addUserForm.email}
+              onChange={(e) =>
+                setAddUserForm((prev) => ({ ...prev, email: e.target.value }))
+              }
+              placeholder="Entrez l'e-mail"
+              type="email"
+              required
+            />
+            <Input
+              label="Rôle"
+              name="role"
+              value={addUserForm.role}
+              onChange={(e) =>
+                setAddUserForm((prev) => ({ ...prev, role: e.target.value }))
+              }
+              placeholder="Entrez le rôle"
+              required
             />
             <Button type="submit" variant="primary" className="mt-4">
               Ajouter
@@ -134,12 +194,20 @@ const AdminPage: React.FC = () => {
       )}
 
       {/* Modal for Editing User */}
-      {isEditModalOpen && (
+      {activeModal === "edit" && (
         <Modal
           title="Modifier un utilisateur"
-          onClose={() => setEditModalOpen(false)}
+          onClose={() => setActiveModal(null)}
         >
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target as HTMLFormElement);
+              const userData = handleFormDataConversion(formData);
+              const id = Number(formData.get("id"));
+              handleEditUser(id, userData);
+            }}
+          >
             <Input
               label="Identifiant"
               name="id"
@@ -158,10 +226,28 @@ const AdminPage: React.FC = () => {
             <Input label="E-mail" name="email" placeholder="Entrez l'e-mail" />
             <Input label="Rôle" name="role" placeholder="Entrez le rôle" />
             <Input
-              label="Dernière connexion"
-              name="lastLogin"
-              placeholder="Entrez la date de dernière connexion"
+              label="Mot de passe"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={editUserForm.password}
+              onChange={
+                (e) =>
+                  setEditUserForm((prev: any) => ({
+                    ...prev,
+                    password: e.target.value,
+                  })) // Ajout du type explicite pour 'prev'
+              }
+              placeholder="Entrez le mot de passe"
+              required
             />
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="ml-2"
+            >
+              {showPassword ? "Cacher" : "Afficher"}
+            </Button>
             <Button type="submit" variant="secondary" className="mt-4">
               Modifier
             </Button>

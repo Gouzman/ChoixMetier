@@ -2,19 +2,19 @@ import React from "react";
 
 interface ModalProps {
   title: string;
-  onClose: () => void;
   children: React.ReactNode;
+  onClose: () => void;
 }
 
-export const Modal: React.FC<ModalProps> = ({ title, onClose, children }) => {
+export const Modal: React.FC<ModalProps> = ({ title, children, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg w-96">
-        <div className="border-b p-4 flex justify-between items-center">
-          <h2 className="text-lg font-medium">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+        <div className="p-4 border-b border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
           >
             &times;
           </button>

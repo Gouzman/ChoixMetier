@@ -69,9 +69,10 @@ export const FormTabs: React.FC<FormTabsProps> = ({
 
       <TabContent value="professionalDetails">
         <FormProfessionalDetails
-          data={formData.professionalDetails ?? {}}
+          data={formData.professionalDetails || {}}
           onChange={(professionalDetails) =>
             onChange({
+              ...formData,
               professionalDetails: {
                 ...formData.professionalDetails,
                 ...professionalDetails,
@@ -84,9 +85,10 @@ export const FormTabs: React.FC<FormTabsProps> = ({
 
       <TabContent value="schoolReturn">
         <FormSchoolReturn
-          data={formData.schoolReturn ?? {}}
+          data={formData.schoolReturn || {}}
           onChange={(schoolReturn) =>
             onChange({
+              ...formData,
               schoolReturn: {
                 ...formData.schoolReturn,
                 ...schoolReturn,

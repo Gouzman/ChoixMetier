@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
 import {
   Table,
@@ -11,13 +11,8 @@ import {
 import { Badge } from "../ui/Badge";
 import { formatDate } from "../../lib/utils";
 import { mockFormData } from "../../data/mockData";
-import { Modal } from "../ui/Modal";
 
 export const RecentActivity: React.FC = () => {
-  const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-
-  // Get the 5 most recent forms
   const recentForms = [...mockFormData]
     .filter((form) => form.participant.createdAt !== undefined)
     .sort(
@@ -62,26 +57,6 @@ export const RecentActivity: React.FC = () => {
           </TableBody>
         </Table>
       </CardContent>
-
-      {/* Modal for Adding User */}
-      {isAddModalOpen && (
-        <Modal
-          title="Ajouter un utilisateur"
-          onClose={() => setAddModalOpen(false)}
-        >
-          <p>Formulaire pour ajouter un utilisateur.</p>
-        </Modal>
-      )}
-
-      {/* Modal for Editing User */}
-      {isEditModalOpen && (
-        <Modal
-          title="Modifier un utilisateur"
-          onClose={() => setEditModalOpen(false)}
-        >
-          <p>Formulaire pour modifier les informations d'un utilisateur.</p>
-        </Modal>
-      )}
     </Card>
   );
 };

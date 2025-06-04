@@ -1,25 +1,26 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
-import { Alert } from '../ui/Alert';
-import { User, Lock } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
+import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
+import { Alert } from "../ui/Alert";
+import { User, Lock } from "lucide-react";
 
 export const LoginForm: React.FC = () => {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const { login, isLoading, error } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       await login(username, password);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
-      // Error is handled by the store
+      console.error("Erreur lors de la connexion :", error);
+      // Vous pouvez également afficher un message d'erreur ou effectuer une autre action ici
     }
   };
 
@@ -58,20 +59,20 @@ export const LoginForm: React.FC = () => {
       )}
 
       <div>
-        <Button
-          type="submit"
-          isLoading={isLoading}
-          className="w-full"
-        >
+        <Button type="submit" isLoading={isLoading} className="w-full">
           Se connecter
         </Button>
       </div>
-      
+
       <div className="text-center text-sm">
         <p className="text-gray-600">
           Pour la démo: <br />
-          Admin: <code className="bg-gray-100 px-1 rounded">admin</code> / <code className="bg-gray-100 px-1 rounded">password</code> <br />
-          Opérateur: <code className="bg-gray-100 px-1 rounded">operator</code> / <code className="bg-gray-100 px-1 rounded">password</code>
+          Admin: <code className="bg-gray-100 px-1 rounded">admin</code> /{" "}
+          <code className="bg-gray-100 px-1 rounded">password</code> <br />
+          Opérateur: <code className="bg-gray-100 px-1 rounded">
+            operator
+          </code>{" "}
+          / <code className="bg-gray-100 px-1 rounded">password</code>
         </p>
       </div>
     </form>
