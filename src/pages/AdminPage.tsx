@@ -31,6 +31,7 @@ const AdminPage: React.FC = () => {
     name: "",
     email: "",
     role: "operator",
+    password: "", // Ajout du champ password
   });
   const [editUserForm, setEditUserForm] = useState<any>({});
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -98,6 +99,7 @@ const AdminPage: React.FC = () => {
                 <TableHead>Nom d'utilisateur</TableHead>
                 <TableHead>Nom complet</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Mot de passe</TableHead>
                 <TableHead>Rôle</TableHead>
                 <TableHead>Dernière connexion</TableHead>
               </TableRow>
@@ -109,6 +111,15 @@ const AdminPage: React.FC = () => {
                   <TableCell className="font-medium">{user.username}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      {user.password ? (
+                        <span className="text-green-600 text-sm">Défini</span>
+                      ) : (
+                        <span className="text-red-600 text-sm">Non défini</span>
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center">
                       {user.role === "admin" && (
@@ -186,6 +197,30 @@ const AdminPage: React.FC = () => {
               placeholder="Entrez le rôle"
               required
             />
+            <div className="relative">
+              <Input
+                label="Mot de passe"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={addUserForm.password}
+                onChange={(e) =>
+                  setAddUserForm((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                placeholder="Entrez le mot de passe"
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-2 top-8"
+              >
+                {showPassword ? "Cacher" : "Afficher"}
+              </Button>
+            </div>
             <Button type="submit" variant="primary" className="mt-4">
               Ajouter
             </Button>

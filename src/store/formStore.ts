@@ -21,6 +21,7 @@ interface FormState {
   updateForm: (id: string, form: Partial<FormData>) => void;
   deleteForm: (id: string) => void;
   setCurrentForm: (id: string | null) => void;
+  clearError: () => void;
 }
 
 const initialState = {
@@ -35,7 +36,7 @@ export const useFormStore = create<FormState>((set, get) => ({
   ...initialState,
 
   searchForms: (filter: SearchFilter) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
 
     try {
       // Simulate API call
@@ -87,32 +88,35 @@ export const useFormStore = create<FormState>((set, get) => ({
         });
       }, 500);
     } catch (error) {
+      console.error("Erreur lors de la recherche:", error);
       set({
-        error: "Erreur lors de la recherche",
+        error: error instanceof Error ? error.message : "Erreur lors de la recherche",
         isLoading: false,
+        searchResults: [],
       });
     }
   },
 
   getForm: (id: string) => {
-    return get().forms.find((form) => form.participant.id === id) || null;
+    try {
+      return get().forms.find((form) => form.participant.id === id) || null;
+    } catch (error) {
+      console.error("Erreur lors de la récupération du formulaire:", error);
+      set({ error: error instanceof Error ? error.message : "Erreur lors de la récupération du formulaire" });
+      return null;
+    }
   },
 
   createForm: (formData) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
 
     try {
-      // Generate a new ID for the participant
       const id = generateId("P");
       const now = new Date();
 
-      // Create the complete form with generated ID and timestamps
       const newForm: FormData = {
         participant: {
-          ...(formData.participant as Omit<
-            Participant,
-            "id" | "createdAt" | "updatedAt"
-          >),
+          ...(formData.participant as Omit<Participant, "id" | "createdAt" | "updatedAt">),
           id,
           createdAt: now,
           updatedAt: now,
@@ -133,15 +137,17 @@ export const useFormStore = create<FormState>((set, get) => ({
         isLoading: false,
       }));
     } catch (error) {
+      console.error("Erreur lors de la création du formulaire:", error);
       set({
-        error: "Erreur lors de la création du formulaire",
+        error: error instanceof Error ? error.message : "Erreur lors de la création du formulaire",
         isLoading: false,
       });
+      throw error; // Propager l'erreur pour la gestion au niveau du composant
     }
   },
 
   updateForm: (id: string, formData) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
 
     try {
       set((state) => {
@@ -150,10 +156,7 @@ export const useFormStore = create<FormState>((set, get) => ({
         );
 
         if (formIndex === -1) {
-          return {
-            error: "Formulaire non trouvé",
-            isLoading: false,
-          };
+          throw new Error("Formulaire non trouvé");
         }
 
         const updatedForm = {
@@ -176,38 +179,64 @@ export const useFormStore = create<FormState>((set, get) => ({
         };
       });
     } catch (error) {
+      console.error("Erreur lors de la mise à jour du formulaire:", error);
       set({
-        error: "Erreur lors de la mise à jour du formulaire",
+        error: error instanceof Error ? error.message : "Erreur lors de la mise à jour du formulaire",
         isLoading: false,
       });
+      throw error; // Propager l'erreur pour la gestion au niveau du composant
     }
   },
 
   deleteForm: (id: string) => {
-    set({ isLoading: true });
+    set({ isLoading: true, error: null });
 
     try {
-      set((state) => ({
-        forms: state.forms.filter((form) => form.participant.id !== id),
-        currentForm:
-          state.currentForm?.participant.id === id ? null : state.currentForm,
-        isLoading: false,
-      }));
+      set((state) => {
+        const formExists = state.forms.some((form) => form.participant.id === id);
+        if (!formExists) {
+          throw new Error("Formulaire non trouvé");
+        }
+
+        return {
+          forms: state.forms.filter((form) => form.participant.id !== id),
+          currentForm: state.currentForm?.participant.id === id ? null : state.currentForm,
+          isLoading: false,
+        };
+      });
     } catch (error) {
+      console.error("Erreur lors de la suppression du formulaire:", error);
       set({
-        error: "Erreur lors de la suppression du formulaire",
+        error: error instanceof Error ? error.message : "Erreur lors de la suppression du formulaire",
         isLoading: false,
       });
+      throw error; // Propager l'erreur pour la gestion au niveau du composant
     }
   },
 
   setCurrentForm: (id: string | null) => {
+    set({ error: null });
     if (id === null) {
       set({ currentForm: null });
       return;
     }
 
-    const form = get().forms.find((form) => form.participant.id === id) || null;
-    set({ currentForm: form });
+    try {
+      const form = get().forms.find((form) => form.participant.id === id);
+      if (!form) {
+        throw new Error("Formulaire non trouvé");
+      }
+      set({ currentForm: form });
+    } catch (error) {
+      console.error("Erreur lors de la sélection du formulaire:", error);
+      set({
+        error: error instanceof Error ? error.message : "Erreur lors de la sélection du formulaire",
+        currentForm: null,
+      });
+    }
+  },
+
+  clearError: () => {
+    set({ error: null });
   },
 }));

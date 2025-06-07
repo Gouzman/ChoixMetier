@@ -1,9 +1,16 @@
-import { create } from 'zustand';
-import { mockUsers } from '../data/mockData';
-import { User } from '../types';
+import { create } from "zustand";
+
+interface IUser {
+  id: number;
+  username: string;
+  name: string;
+  email: string;
+  role: "admin" | "operator";
+  lastLogin?: Date;
+}
 
 interface AuthState {
-  user: User | null;
+  user: IUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -19,45 +26,49 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   login: async (username: string, password: string) => {
     set({ isLoading: true, error: null });
-    
+
     try {
-      // Simulate API call with a small delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Simple mock authentication
-      // In a real app, this would be an API call to a backend
-      const user = mockUsers.find(u => u.username === username);
-      
-      if (user && password === 'password') { // In real app, use proper password validation
-        set({ 
-          user, 
-          isAuthenticated: true, 
+      // Appeler l'API pour vérifier les identifiants
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        set({
+          user,
+          isAuthenticated: true,
           isLoading: false,
-          error: null
+          error: null,
         });
       } else {
-        set({ 
-          user: null, 
-          isAuthenticated: false, 
+        set({
+          user: null,
+          isAuthenticated: false,
           isLoading: false,
-          error: 'Identifiants incorrects' 
+          error: "Identifiants incorrects",
         });
       }
     } catch (error) {
-      set({ 
-        user: null, 
-        isAuthenticated: false, 
+      console.error("Login error:", error);
+      set({
+        user: null,
+        isAuthenticated: false,
         isLoading: false,
-        error: 'Erreur de connexion' 
+        error: "Erreur de connexion",
       });
     }
   },
 
   logout: () => {
-    set({ 
-      user: null, 
+    set({
+      user: null,
       isAuthenticated: false,
-      error: null
+      error: null,
     });
-  }
+  },
 }));

@@ -1,13 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { User } from "lucide-react";
-import { useTheme } from "../../context/ThemeContext";
+import { Link, useLocation } from "react-router-dom";
+import { User, LogOut } from "lucide-react";
+import { useAuthStore } from "../../store/authStore";
 
 export const Header: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+  const logout = useAuthStore((state) => state.logout);
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const navLinks = [
+    { to: "/dashboard", label: "Tableau de bord" },
+    { to: "/search", label: "Recherche" },
+    { to: "/forms/new", label: "Nouveau formulaire" },
+    { to: "/admin", label: "Administration" },
+  ];
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -19,14 +31,33 @@ export const Header: React.FC = () => {
                 GestionMétiers
               </span>
             </Link>
+
+            {/* Navigation principale */}
+            <nav className="hidden md:ml-8 md:flex md:space-x-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${
+                    isActive(link.to)
+                      ? "bg-blue-100 text-blue-700"
+                      : "text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Actions du côté droit */}
+          <div className="flex items-center">
             <button
-              onClick={toggleTheme}
-              className="p-2 rounded-md bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200"
+              onClick={logout}
+              className="ml-4 flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
-              {theme === "light" ? "Mode Sombre" : "Mode Clair"}
+              <LogOut size={18} className="mr-2" />
+              Déconnexion
             </button>
           </div>
         </div>

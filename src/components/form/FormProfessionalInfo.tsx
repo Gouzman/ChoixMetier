@@ -25,7 +25,7 @@ export const FormProfessionalInfo: React.FC<FormProfessionalInfoProps> = ({
             <Input
               label="Avec qui vivais-tu avant de venir sur le centre ?"
               name="livingBeforeCenter"
-              value={data.livingBeforeCenter || ""}
+              value={data.livingBeforeCenter ?? ""}
               onChange={(e) =>
                 onChange({ ...data, livingBeforeCenter: e.target.value })
               }

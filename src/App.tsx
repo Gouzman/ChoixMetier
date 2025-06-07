@@ -1,16 +1,21 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginForm } from './components/auth/LoginForm';
-import { AuthLayout } from './components/layout/AuthLayout';
-import { AppLayout } from './components/layout/AppLayout';
+import React from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+import { LoginForm } from "./components/auth/LoginForm";
+import { AuthLayout } from "./components/layout/AuthLayout";
+import { AppLayout } from "./components/layout/AppLayout";
+import { ErrorBoundary } from "./components/error/ErrorBoundary";
 
 // Dynamically import pages for better code splitting
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
-const SearchPage = React.lazy(() => import('./pages/SearchPage'));
-const FormCreate = React.lazy(() => import('./pages/FormCreate'));
-const FormView = React.lazy(() => import('./pages/FormView'));
-const FormEdit = React.lazy(() => import('./pages/FormEdit'));
-const AdminPage = React.lazy(() => import('./pages/AdminPage'));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const SearchPage = React.lazy(() => import("./pages/SearchPage"));
+const FormCreate = React.lazy(() => import("./pages/FormCreate"));
+const FormView = React.lazy(() => import("./pages/FormView"));
+const FormEdit = React.lazy(() => import("./pages/FormEdit"));
+const AdminPage = React.lazy(() => import("./pages/AdminPage"));
 
 const Loading = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -18,32 +23,40 @@ const Loading = () => (
   </div>
 );
 
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <Navigate to="/login" /> },
+      { path: "login", element: <LoginForm /> },
+    ],
+  },
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "search", element: <SearchPage /> },
+      { path: "forms/new", element: <FormCreate /> },
+      { path: "forms/:id", element: <FormView /> },
+      { path: "forms/:id/edit", element: <FormEdit /> },
+      { path: "admin", element: <AdminPage /> },
+    ],
+  },
+  {
+    path: "*",
+    element: <Navigate to="/dashboard" replace />,
+  },
+]);
+
 function App() {
   return (
-    <BrowserRouter>
+    <ErrorBoundary>
       <React.Suspense fallback={<Loading />}>
-        <Routes>
-          {/* Auth routes */}
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Navigate to="/login\" replace />} />
-            <Route path="login" element={<LoginForm />} />
-          </Route>
-          
-          {/* App routes */}
-          <Route path="/" element={<AppLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="forms/new" element={<FormCreate />} />
-            <Route path="forms/:id" element={<FormView />} />
-            <Route path="forms/:id/edit" element={<FormEdit />} />
-            <Route path="admin" element={<AdminPage />} />
-          </Route>
-          
-          {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/dashboard\" replace />} />
-        </Routes>
+        <RouterProvider router={router} />
       </React.Suspense>
-    </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
